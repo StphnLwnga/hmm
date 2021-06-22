@@ -1,5 +1,15 @@
 class SudokuSolver {
 
+  constructor(){ this.runCount = []}
+
+  incRunCount(c) {
+    this.runCount.push(c);
+  }
+
+  getRunCount() {
+    return this.runCount;
+  }
+
   generateGrid(puzzleString) {
     const a = [];
 
@@ -128,6 +138,12 @@ class SudokuSolver {
       
       let solvedRound = Object.values(puzzle).join('')
       // console.log(solvedRound)
+      let prevRuns = this.getRunCount();
+      // console.log(prevRuns)
+      if (prevRuns.length > 0 && prevRuns[prevRuns.length - 2] === puzzleString) throw 'Puzzle cannot be solved';
+
+      this.incRunCount(solvedRound);
+
 
       if (this.checkEmptySlot(solvedRound)) this.solve(solvedRound);
 
