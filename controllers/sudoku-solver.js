@@ -3,9 +3,9 @@ class SudokuSolver {
   generateGrid(puzzleString) {
     const a = [];
 
-    for (let i = 65; i <= 73; i++)
+    for (let charCode = 65; charCode <= 73; charCode++)
       for (let j = 1; j <= 9; j++)
-        a.push(`${String.fromCharCode(i)}${j}`);
+        a.push(`${String.fromCharCode(charCode)}${j}`);
 
     return a.map((cell, i) => {
       let obj = {}
@@ -60,8 +60,6 @@ class SudokuSolver {
   checkRowPlacement(puzzleString, row, column, value) {
     let dividedGrid = this.generateDividedGrid(puzzleString);
 
-    let hasEmptyCell = this.checkEmptySlot(puzzleString)
-
     // console.log(dividedGrid, hasEmptyCell)
     const rowNum = row.toUpperCase().charCodeAt();
 
@@ -114,7 +112,7 @@ class SudokuSolver {
       let puzzle = {}
       a.map(cell => puzzle[Object.keys(cell)[0]] = Object.values(cell)[0]);
 
-      for (let cell in puzzle) {
+      for (let cell in puzzle) 
         if (puzzle[cell] === '.') {
           let arr = [];
           for (let i=1; i<=9; i++) {
@@ -127,12 +125,14 @@ class SudokuSolver {
           }
           if (arr.length === 1) puzzle[cell] = arr[0].toString();
         }
-      }
+      
       let solvedRound = Object.values(puzzle).join('')
       // console.log(solvedRound)
 
-      return this.checkEmptySlot(solvedRound) ? this.solve(solvedRound) : console.log(puzzleString)
+      if (this.checkEmptySlot(solvedRound)) this.solve(solvedRound);
 
+      console.log(solvedRound)
+      return solvedRound;
     } catch (error) {
       console.log(error)
       return { error }

@@ -87,7 +87,6 @@ suite('UnitTests', () => {
 		const solve = solver.solve(puzzle);
 		assert.isString(solve);
 		assert.equal(solve, solution);
-		// assert.fail('Test not implemented');
 		done();
 	});
 
