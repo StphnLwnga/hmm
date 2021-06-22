@@ -14,10 +14,10 @@ module.exports = function (app) {
         if (!puzzle || puzzle === '' || !coordinate || coordinate === '' || !value || value === '')
           throw 'Required field(s) missing';
 
-        if ( coordinate.length !== 2 || /[^a-iA-I]/g.test(coordinate[0]) || /[^1-9]/g.test(coordinate[1])) 
+        if (coordinate.length !== 2 || /[^a-iA-I]/g.test(coordinate[0]) || /[^1-9]/g.test(coordinate[1]))
           throw 'Invalid coordinate';
-        
-        if (parseInt(value) < 1 || parseInt(value) > 9) 
+
+        if (parseInt(value) < 1 || parseInt(value) > 9)
           throw 'Invalid value';
 
         let validPuzzle = solver.validate(puzzle);
@@ -48,7 +48,7 @@ module.exports = function (app) {
 
           data.valid = colPlace && rowPlace && regionPlace ? true : false;
 
-          if (conflict.length > 0) {data.conflict = conflict;}
+          if (conflict.length > 0) { data.conflict = conflict; }
         }
 
         return res.json(data);
@@ -62,6 +62,9 @@ module.exports = function (app) {
     .post((req, res) => {
       try {
         let { puzzle } = req.body;
+        // console.log(puzzle)
+
+        const data = {};
 
         if (!puzzle) throw 'Required field missing';
 
@@ -69,10 +72,13 @@ module.exports = function (app) {
 
         if (validPuzzle.error) throw validPuzzle.error
 
-        // solver.checkRowPlacement(validPuzzle);
-        const data = {};
+        let solved = solver.solve(validPuzzle);
 
-        return res.json(data)
+        // if (solved.error) throw 'Puzzle cannot be solved';
+
+        // data.solution = solved;
+
+        return res.json(data);
 
       } catch (error) {
         console.log(error)

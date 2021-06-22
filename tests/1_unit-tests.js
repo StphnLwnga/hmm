@@ -78,23 +78,24 @@ suite('UnitTests', () => {
 		const regionChecker = solver.checkRegionPlacement(puzzle, 'a', 2, 6);
 		assert.isBoolean(regionChecker, 'Invalid region placement check returns a boolean');
 		assert.equal(regionChecker, false,'Invalid region placement returns false');
+		done();
 	});
 
 	test('Valid puzzle strings pass the solver', done => {
 		const puzzle = puzzles[0].puzzle;
 		const solution = puzzles[0].solution
-		// const solve = solver.solve(puzzle);
-		// assert.isString(solve);
-		// assert.equal(solve, solution);
-		assert.fail('Test not implemented');
+		const solve = solver.solve(puzzle);
+		assert.isString(solve);
+		assert.equal(solve, solution);
+		// assert.fail('Test not implemented');
 		done();
 	});
 
 	test('Invalid puzzles fail the solver', done => {
-		// const solve = solver.solve(puzzle);
-		// assert.isObject(solve);
-		// assert.property(solve)
-		// assert.equal(solve, 'Puzzle cannot be solved')
+		const solve = solver.solve(puzzle);
+		assert.isObject(solve);
+		assert.property(solve, 'error')
+		assert.equal(solve.error, 'Puzzle cannot be solved');
 		assert.fail('Test not implemented');
 		done();
 	});

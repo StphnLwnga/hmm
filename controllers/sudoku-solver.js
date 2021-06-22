@@ -24,7 +24,7 @@ class SudokuSolver {
           cell => Object.keys(cell)[0].includes(String.fromCharCode(i))
         )
       );
-    
+
     return dividedGrid;
   }
 
@@ -44,15 +44,25 @@ class SudokuSolver {
 
   checkValueInCell(puzzleString, row, column, value) {
     let populatedGrid = this.generateGrid(puzzleString);
+    // console.log(populatedGrid)
 
     let cell = populatedGrid.filter(c => Object.keys(c)[0] === `${row.toUpperCase()}${column}`)[0]
 
     return Object.values(cell)[0] === value.toString() ? true : false
   }
 
+  checkEmptySlot(puzzleString) {
+    let populatedGrid = this.generateGrid(puzzleString);
+
+    return populatedGrid.some(cell => Object.values(cell)[0] === '.');
+  }
+
   checkRowPlacement(puzzleString, row, column, value) {
     let dividedGrid = this.generateDividedGrid(puzzleString);
 
+    let hasEmptyCell = this.checkEmptySlot(puzzleString)
+
+    // console.log(dividedGrid, hasEmptyCell)
     const rowNum = row.toUpperCase().charCodeAt();
 
     const currentRow = dividedGrid[rowNum - 65].map(cell => Object.values(cell)[0]);
@@ -64,6 +74,7 @@ class SudokuSolver {
   checkColPlacement(puzzleString, row, column, value) {
     let dividedGrid = this.generateDividedGrid(puzzleString);
 
+    // Witchcraft!
     const currentCol = dividedGrid.map(r => Object.values(r[parseInt(column) - 1])[0]);
     // console.log(currentCol);
 
@@ -76,10 +87,10 @@ class SudokuSolver {
     let cellKey = `${row.toUpperCase()}${column}`;
 
     // Generate 3x3 grids as subarrays
-    for (let i=0; i<9; i+=3)
-      for (let j=0; j<9; j+=3)
+    for (let i = 0; i < 9; i += 3)
+      for (let j = 0; j < 9; j += 3)
         regionGrid.push(
-          dividedGrid.map(cell => [cell[j], cell[j+1], cell[j+2]]).slice(i, i+3)
+          dividedGrid.map(cell => [cell[j], cell[j + 1], cell[j + 2]]).slice(i, i + 3)
         );
 
     const regionGridFlat = regionGrid.map(region => region.flat())
@@ -96,7 +107,36 @@ class SudokuSolver {
   }
 
   solve(puzzleString) {
-    
+    try {
+      if (!this.checkEmptySlot(puzzleString)) return puzzleString;
+
+      let a = this.generateGrid(puzzleString);
+      let puzzle = {}
+      a.map(cell => puzzle[Object.keys(cell)[0]] = Object.values(cell)[0]);
+
+      for (let cell in puzzle) {
+        if (puzzle[cell] === '.') {
+          let arr = [];
+          for (let i=1; i<=9; i++) {
+            let [rowPlacement, colPlacement, regPlacement] = [
+              this.checkRowPlacement(puzzleString, cell[0], cell[1], i),
+              this.checkColPlacement(puzzleString, cell[0], cell[1], i),
+              this.checkRegionPlacement(puzzleString, cell[0], cell[1], i)
+            ];
+            if (rowPlacement && colPlacement && regPlacement) arr.push(i)
+          }
+          if (arr.length === 1) puzzle[cell] = arr[0].toString();
+        }
+      }
+      let solvedRound = Object.values(puzzle).join('')
+      // console.log(solvedRound)
+
+      return this.checkEmptySlot(solvedRound) ? this.solve(solvedRound) : console.log(puzzleString)
+
+    } catch (error) {
+      console.log(error)
+      return { error }
+    }
   }
 }
 

@@ -19,7 +19,6 @@ suite('Functional Tests', () => {
 				.post('/api/solve')
 				.send({ puzzle })
 				.end((err, res) => {
-					// console.log(res);
 					assert.equal(res.status, 200);
 					assert.isObject(res.body)
 					assert.property(res.body, 'solution');
@@ -159,23 +158,21 @@ suite('Functional Tests', () => {
 
 		test('Check a puzzle placement with all placement conflicts', done => {
 			let puzzle = solvedPuzzles[0][1];
-			let value = 
+			let value = 2;
 			chai.request(server)
 				.post('/api/check')
 				.send({
 					puzzle,
-					coordinate: 'A2',
+					coordinate: 'B2',
 					value
 				})
 				.end((err, res) => {
-					// console.log(res.body)
-					// assert.equal(res.status, 200);
-					// assert.isObject(res.body);
-					// assert.isFalse(res.body.valid);
-					// assert.property(res.body, 'conflict');
-					// assert.lengthOf(res.body.conflict, 3);
-					// ['row', 'column', 'region'].every(conflict => assert.include(res.body.conflict, conflict));
-					assert.fail('Complete region placement method first')
+					assert.equal(res.status, 200);
+					assert.isObject(res.body);
+					assert.isFalse(res.body.valid);
+					assert.property(res.body, 'conflict');
+					assert.lengthOf(res.body.conflict, 3);
+					['row', 'column', 'region'].every(conflict => assert.include(res.body.conflict, conflict));
 					done();
 				});
 		});
