@@ -43,7 +43,6 @@ suite('Functional Tests', () => {
 					assert.property(res.body, 'error');
 					assert.isString(res.body.error);
 					assert.equal(res.body.error, 'Required field missing');
-					assert.fail('Missing solve method')
 					done();
 				});
 		});
@@ -79,7 +78,7 @@ suite('Functional Tests', () => {
 		});
 
 		test('Solve a puzzle that cannot be solved', done => {
-			let puzzle = solvedPuzzles[0][0].replace(/1/, 2);
+			let puzzle = '.7.89..3335....3.4.2..4..1.5689..472...6.....1.7.5.63873.1.2.8.6..47.1..2.9.387.6';
 			chai.request(server)
 				.post('/api/solve')
 				.send({ puzzle })

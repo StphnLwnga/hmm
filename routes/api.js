@@ -62,7 +62,6 @@ module.exports = function (app) {
     .post((req, res) => {
       try {
         let { puzzle } = req.body;
-        // console.log(puzzle)
 
         const data = {};
 
@@ -74,9 +73,9 @@ module.exports = function (app) {
 
         let solved = solver.solve(validPuzzle);
 
-        // if (solved.error) throw 'Puzzle cannot be solved';
+        if (solved.error) throw solved.error;
 
-        // data.solution = solved;
+        data.solution = solved;
 
         return res.json(data);
 

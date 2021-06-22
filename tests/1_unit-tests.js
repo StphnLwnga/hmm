@@ -91,16 +91,18 @@ suite('UnitTests', () => {
 	});
 
 	test('Invalid puzzles fail the solver', done => {
+		const puzzle = '.7.89..3335....3.4.2..4..1.5689..472...6.....1.7.5.63873.1.2.8.6..47.1..2.9.387.6';
 		const solve = solver.solve(puzzle);
 		assert.isObject(solve);
 		assert.property(solve, 'error')
 		assert.equal(solve.error, 'Puzzle cannot be solved');
-		assert.fail('Test not implemented');
 		done();
 	});
 
 	test('Solver returns the expected solution for an incomplete puzzle', done => {
-		assert.fail('Test not implemented');
+		const puzzle = puzzles[2].puzzle;
+		const solution = puzzles[2].solution;
+		assert.deepEqual(solver.solve(puzzle), solution);
 		done();
 	});
 });

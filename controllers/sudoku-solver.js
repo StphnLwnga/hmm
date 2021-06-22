@@ -144,8 +144,7 @@ class SudokuSolver {
 
       this.incRunCount(solvedRound);
 
-
-      if (this.checkEmptySlot(solvedRound)) this.solve(solvedRound);
+      if (this.checkEmptySlot(solvedRound)) return this.solve(solvedRound);
 
       console.log(solvedRound)
       return solvedRound;
