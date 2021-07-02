@@ -17,7 +17,7 @@ module.exports = function (app) {
         if (coordinate.length !== 2 || /[^a-iA-I]/g.test(coordinate[0]) || /[^1-9]/g.test(coordinate[1]))
           throw 'Invalid coordinate';
 
-        if (parseInt(value) < 1 || parseInt(value) > 9)
+        if (/[^1-9]/g.test(value))
           throw 'Invalid value';
 
         let validPuzzle = solver.validate(puzzle);
@@ -63,21 +63,21 @@ module.exports = function (app) {
       try {
         let { puzzle } = req.body;
 
-        const data = {};
-
         if (!puzzle) throw 'Required field missing';
 
         let validPuzzle = solver.validate(puzzle);
 
-        if (validPuzzle.error) throw validPuzzle.error
+				if (validPuzzle.error) throw validPuzzle.error
+
+				let solvable = solver.checkSolvablePuzzle(validPuzzle);
+
+				if (!solvable) throw 'Puzzle cannot be solved';
 
         let solved = solver.solve(validPuzzle);
 
-        if (solved.error) throw solved.error;
+        // if (solved.error) throw solved.error;
 
-        data.solution = solved;
-
-        return res.json(data);
+        return res.json({ solution:solved.solution });
 
       } catch (error) {
         console.log(error)

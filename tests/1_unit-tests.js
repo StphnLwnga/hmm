@@ -81,28 +81,27 @@ suite('UnitTests', () => {
 		done();
 	});
 
-	test('Valid puzzle strings pass the solver', done => {
+	test('Valid puzzle pass the solver', done => {
 		const puzzle = puzzles[0].puzzle;
-		const solution = puzzles[0].solution
-		const solve = solver.solve(puzzle);
-		assert.isString(solve);
-		assert.equal(solve, solution);
+		const solvable = solver.checkSolvablePuzzle(puzzle);
+		assert.isBoolean(solvable);
+		assert.isTrue(solvable);
 		done();
 	});
 
 	test('Invalid puzzles fail the solver', done => {
 		const puzzle = '.7.89..3335....3.4.2..4..1.5689..472...6.....1.7.5.63873.1.2.8.6..47.1..2.9.387.6';
-		const solve = solver.solve(puzzle);
-		assert.isObject(solve);
-		assert.property(solve, 'error')
-		assert.equal(solve.error, 'Puzzle cannot be solved');
+		const solve = solver.checkSolvablePuzzle(puzzle);
+		assert.isBoolean(solve);
+		assert.isFalse(solve);
 		done();
 	});
 
 	test('Solver returns the expected solution for an incomplete puzzle', done => {
 		const puzzle = puzzles[2].puzzle;
 		const solution = puzzles[2].solution;
-		assert.deepEqual(solver.solve(puzzle), solution);
+		// console.log(solver.solve(puzzle), solution);
+		assert.deepEqual(solver.solve(puzzle).solution, solution);
 		done();
 	});
 });
